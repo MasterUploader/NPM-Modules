@@ -1,0 +1,41 @@
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Linq;
+using UAParser;
+
+namespace MachineInfoService.Controllers
+{
+    [ApiController]
+    [Route("api/info")]
+    public class InfoController : ControllerBase
+    {
+        [HttpGet("machine")]
+        public IActionResult GetMachineInfo()
+        {
+            var hostName = Dns.GetHostName(); // Obtener el nombre del host del servidor
+            var ipAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            
+            // Extraer el User-Agent
+            var userAgentString = Request.Headers["User-Agent"].ToString();
+            var uaParser = Parser.GetDefault();
+            var clientInfo = uaParser.Parse(userAgentString);
+
+            // Verificar si estamos detrás de un proxy y utilizar la cabecera X-Forwarded-For
+            var forwardedIp = Request.Headers["X-Forwarded-For"].FirstOrDefault();
+            if (!string.IsNullOrEmpty(forwardedIp))
+            {
+                ipAddress = forwardedIp.Split(',').FirstOrDefault(); // Toma la primera IP si hay múltiples
+            }
+
+            return Ok(new {
+                HostName = hostName,
+                ClientIPAddress = ipAddress,
+                UserAgent = userAgentString,
+                Browser = clientInfo.UA.Family + " " + clientInfo.UA.Major,
+                OS = clientInfo.OS.Family + " " + clientInfo.OS.Major
+            });
+        }
+
+        // Aquí puedes agregar otros métodos según sea necesario
+    }
+}
