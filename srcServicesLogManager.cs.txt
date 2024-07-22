@@ -39,27 +39,27 @@ namespace NSunitp.Services
             {
                 var logEntry = new LogEntry
                 {
-                    LOG_01_DATE = logData.GetValueOrDefault("LOG_01_DATE"),
-                    LOG_02_TIME = logData.GetValueOrDefault("LOG_02_TIME"),
-                    LOG_03_GUID_CODE = logData.GetValueOrDefault("LOG_03_GUID_CODE"),
-                    LOG_04_CODE = logData.GetValueOrDefault("LOG_04_CODE"),
-                    LOG_05_ENVIRONMENT = logData.GetValueOrDefault("LOG_05_ENVIRONMENT"),
-                    LOG_06_PROCESS = logData.GetValueOrDefault("LOG_06_PROCESS"),
-                    LOG_07_USER_CONNECTION = logData.GetValueOrDefault("LOG_07_USER_CONNECTION"),
-                    LOG_08_INDICATOR_CODE = logData.GetValueOrDefault("LOG_08_INDICATOR_CODE"),
-                    LOG_09_PROGRAM_CODE = logData.GetValueOrDefault("LOG_09_PROGRAM_CODE"),
-                    LOG_10_ACTION_TYPE = logData.GetValueOrDefault("LOG_10_ACTION_TYPE"),
-                    LOG_11_ACTION_DESCRIPTION = logData.GetValueOrDefault("LOG_11_ACTION_DESCRIPTION"),
-                    LOG_12_SERVICE_CODE = logData.GetValueOrDefault("LOG_12_SERVICE_CODE"),
-                    LOG_13_SERVICE_DESCRIPTION = logData.GetValueOrDefault("LOG_13_SERVICE_DESCRIPTION"),
-                    LOG_14_PROCESS_ACTION = logData.GetValueOrDefault("LOG_14_PROCESS_ACTION"),
-                    LOG_15_REFERENCES = logData.GetValueOrDefault("LOG_15_REFERENCES"),
-                    LOG_16_ERROR_CODE = logData.GetValueOrDefault("LOG_16_ERROR_CODE"),
-                    LOG_17_ERROR_DESCRIPTION = logData.GetValueOrDefault("LOG_17_ERROR_DESCRIPTION"),
-                    LOG_18_ERROR_TRACE = logData.GetValueOrDefault("LOG_18_ERROR_TRACE"),
-                    LOG_19_CORE_REFERENCES = logData.GetValueOrDefault("LOG_19_CORE_REFERENCES"),
-                    LOG_20_CORE_ERROR_CODE = logData.GetValueOrDefault("LOG_20_CORE_ERROR_CODE"),
-                    LOG_21_CORE_ERROR_DESCRIPTION = logData.GetValueOrDefault("LOG_21_CORE_ERROR_DESCRIPTION")
+                    LOG_01_DATE = logData.GetValueOrDefault("LOG_01_DATE", string.Empty),
+                    LOG_02_TIME = logData.GetValueOrDefault("LOG_02_TIME", string.Empty),
+                    LOG_03_GUID_CODE = logData.GetValueOrDefault("LOG_03_GUID_CODE", string.Empty),
+                    LOG_04_CODE = logData.GetValueOrDefault("LOG_04_CODE", string.Empty),
+                    LOG_05_ENVIRONMENT = logData.GetValueOrDefault("LOG_05_ENVIRONMENT", string.Empty),
+                    LOG_06_PROCESS = logData.GetValueOrDefault("LOG_06_PROCESS", string.Empty),
+                    LOG_07_USER_CONNECTION = logData.GetValueOrDefault("LOG_07_USER_CONNECTION", string.Empty),
+                    LOG_08_INDICATOR_CODE = logData.GetValueOrDefault("LOG_08_INDICATOR_CODE", string.Empty),
+                    LOG_09_PROGRAM_CODE = logData.GetValueOrDefault("LOG_09_PROGRAM_CODE", string.Empty),
+                    LOG_10_ACTION_TYPE = logData.GetValueOrDefault("LOG_10_ACTION_TYPE", string.Empty),
+                    LOG_11_ACTION_DESCRIPTION = logData.GetValueOrDefault("LOG_11_ACTION_DESCRIPTION", string.Empty),
+                    LOG_12_SERVICE_CODE = logData.GetValueOrDefault("LOG_12_SERVICE_CODE", string.Empty),
+                    LOG_13_SERVICE_DESCRIPTION = logData.GetValueOrDefault("LOG_13_SERVICE_DESCRIPTION", string.Empty),
+                    LOG_14_PROCESS_ACTION = logData.GetValueOrDefault("LOG_14_PROCESS_ACTION", string.Empty),
+                    LOG_15_REFERENCES = logData.GetValueOrDefault("LOG_15_REFERENCES", string.Empty),
+                    LOG_16_ERROR_CODE = logData.GetValueOrDefault("LOG_16_ERROR_CODE", string.Empty),
+                    LOG_17_ERROR_DESCRIPTION = logData.GetValueOrDefault("LOG_17_ERROR_DESCRIPTION", string.Empty),
+                    LOG_18_ERROR_TRACE = logData.GetValueOrDefault("LOG_18_ERROR_TRACE", string.Empty),
+                    LOG_19_CORE_REFERENCES = logData.GetValueOrDefault("LOG_19_CORE_REFERENCES", string.Empty),
+                    LOG_20_CORE_ERROR_CODE = logData.GetValueOrDefault("LOG_20_CORE_ERROR_CODE", string.Empty),
+                    LOG_21_CORE_ERROR_DESCRIPTION = logData.GetValueOrDefault("LOG_21_CORE_ERROR_DESCRIPTION", string.Empty)
                 };
 
                 _buffer.Add(logEntry);
