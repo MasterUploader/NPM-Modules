@@ -33,33 +33,33 @@ namespace NSunitp.Services
             AppDomain.CurrentDomain.UnhandledException += (s, e) => SaveLogs(e.ExceptionObject as Exception);
         }
 
-        public void AddLog(Dictionary<string, string> logData)
+        public void AddLog(Dictionary<string, string?> logData)
         {
             lock (_lock)
             {
                 var logEntry = new LogEntry
                 {
-                    LOG_01_DATE = logData.ContainsKey("LOG_01_DATE") ? logData["LOG_01_DATE"] : null,
-                    LOG_02_TIME = logData.ContainsKey("LOG_02_TIME") ? logData["LOG_02_TIME"] : null,
-                    LOG_03_GUID_CODE = logData.ContainsKey("LOG_03_GUID_CODE") ? logData["LOG_03_GUID_CODE"] : null,
-                    LOG_04_CODE = logData.ContainsKey("LOG_04_CODE") ? logData["LOG_04_CODE"] : null,
-                    LOG_05_ENVIRONMENT = logData.ContainsKey("LOG_05_ENVIRONMENT") ? logData["LOG_05_ENVIRONMENT"] : null,
-                    LOG_06_PROCESS = logData.ContainsKey("LOG_06_PROCESS") ? logData["LOG_06_PROCESS"] : null,
-                    LOG_07_USER_CONNECTION = logData.ContainsKey("LOG_07_USER_CONNECTION") ? logData["LOG_07_USER_CONNECTION"] : null,
-                    LOG_08_INDICATOR_CODE = logData.ContainsKey("LOG_08_INDICATOR_CODE") ? logData["LOG_08_INDICATOR_CODE"] : null,
-                    LOG_09_PROGRAM_CODE = logData.ContainsKey("LOG_09_PROGRAM_CODE") ? logData["LOG_09_PROGRAM_CODE"] : null,
-                    LOG_10_ACTION_TYPE = logData.ContainsKey("LOG_10_ACTION_TYPE") ? logData["LOG_10_ACTION_TYPE"] : null,
-                    LOG_11_ACTION_DESCRIPTION = logData.ContainsKey("LOG_11_ACTION_DESCRIPTION") ? logData["LOG_11_ACTION_DESCRIPTION"] : null,
-                    LOG_12_SERVICE_CODE = logData.ContainsKey("LOG_12_SERVICE_CODE") ? logData["LOG_12_SERVICE_CODE"] : null,
-                    LOG_13_SERVICE_DESCRIPTION = logData.ContainsKey("LOG_13_SERVICE_DESCRIPTION") ? logData["LOG_13_SERVICE_DESCRIPTION"] : null,
-                    LOG_14_PROCESS_ACTION = logData.ContainsKey("LOG_14_PROCESS_ACTION") ? logData["LOG_14_PROCESS_ACTION"] : null,
-                    LOG_15_REFERENCES = logData.ContainsKey("LOG_15_REFERENCES") ? logData["LOG_15_REFERENCES"] : null,
-                    LOG_16_ERROR_CODE = logData.ContainsKey("LOG_16_ERROR_CODE") ? logData["LOG_16_ERROR_CODE"] : null,
-                    LOG_17_ERROR_DESCRIPTION = logData.ContainsKey("LOG_17_ERROR_DESCRIPTION") ? logData["LOG_17_ERROR_DESCRIPTION"] : null,
-                    LOG_18_ERROR_TRACE = logData.ContainsKey("LOG_18_ERROR_TRACE") ? logData["LOG_18_ERROR_TRACE"] : null,
-                    LOG_19_CORE_REFERENCES = logData.ContainsKey("LOG_19_CORE_REFERENCES") ? logData["LOG_19_CORE_REFERENCES"] : null,
-                    LOG_20_CORE_ERROR_CODE = logData.ContainsKey("LOG_20_CORE_ERROR_CODE") ? logData["LOG_20_CORE_ERROR_CODE"] : null,
-                    LOG_21_CORE_ERROR_DESCRIPTION = logData.ContainsKey("LOG_21_CORE_ERROR_DESCRIPTION") ? logData["LOG_21_CORE_ERROR_DESCRIPTION"] : null,
+                    LOG_01_DATE = logData.GetValueOrDefault("LOG_01_DATE"),
+                    LOG_02_TIME = logData.GetValueOrDefault("LOG_02_TIME"),
+                    LOG_03_GUID_CODE = logData.GetValueOrDefault("LOG_03_GUID_CODE"),
+                    LOG_04_CODE = logData.GetValueOrDefault("LOG_04_CODE"),
+                    LOG_05_ENVIRONMENT = logData.GetValueOrDefault("LOG_05_ENVIRONMENT"),
+                    LOG_06_PROCESS = logData.GetValueOrDefault("LOG_06_PROCESS"),
+                    LOG_07_USER_CONNECTION = logData.GetValueOrDefault("LOG_07_USER_CONNECTION"),
+                    LOG_08_INDICATOR_CODE = logData.GetValueOrDefault("LOG_08_INDICATOR_CODE"),
+                    LOG_09_PROGRAM_CODE = logData.GetValueOrDefault("LOG_09_PROGRAM_CODE"),
+                    LOG_10_ACTION_TYPE = logData.GetValueOrDefault("LOG_10_ACTION_TYPE"),
+                    LOG_11_ACTION_DESCRIPTION = logData.GetValueOrDefault("LOG_11_ACTION_DESCRIPTION"),
+                    LOG_12_SERVICE_CODE = logData.GetValueOrDefault("LOG_12_SERVICE_CODE"),
+                    LOG_13_SERVICE_DESCRIPTION = logData.GetValueOrDefault("LOG_13_SERVICE_DESCRIPTION"),
+                    LOG_14_PROCESS_ACTION = logData.GetValueOrDefault("LOG_14_PROCESS_ACTION"),
+                    LOG_15_REFERENCES = logData.GetValueOrDefault("LOG_15_REFERENCES"),
+                    LOG_16_ERROR_CODE = logData.GetValueOrDefault("LOG_16_ERROR_CODE"),
+                    LOG_17_ERROR_DESCRIPTION = logData.GetValueOrDefault("LOG_17_ERROR_DESCRIPTION"),
+                    LOG_18_ERROR_TRACE = logData.GetValueOrDefault("LOG_18_ERROR_TRACE"),
+                    LOG_19_CORE_REFERENCES = logData.GetValueOrDefault("LOG_19_CORE_REFERENCES"),
+                    LOG_20_CORE_ERROR_CODE = logData.GetValueOrDefault("LOG_20_CORE_ERROR_CODE"),
+                    LOG_21_CORE_ERROR_DESCRIPTION = logData.GetValueOrDefault("LOG_21_CORE_ERROR_DESCRIPTION")
                 };
 
                 _buffer.Add(logEntry);
@@ -91,11 +91,11 @@ namespace NSunitp.Services
             }
         }
 
-        private void SaveLogs(Exception ex)
+        private void SaveLogs(Exception? ex)
         {
             if (ex != null)
             {
-                var logData = new Dictionary<string, string>
+                var logData = new Dictionary<string, string?>
                 {
                     { "LOG_17_ERROR_DESCRIPTION", ex.Message },
                     { "LOG_18_ERROR_TRACE", ex.StackTrace }
