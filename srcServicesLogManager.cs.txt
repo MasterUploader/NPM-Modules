@@ -33,89 +33,40 @@ namespace NSunitp.Services
             AppDomain.CurrentDomain.UnhandledException += (s, e) => SaveLogs(e.ExceptionObject as Exception);
         }
 
- // src/Services/LogManager.cs
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text.Json;
-using System.Timers;
-using System.Xml.Serialization;
-using Microsoft.EntityFrameworkCore;
-using NSunitp.Data;
-using NSunitp.Models;
-
-namespace NSunitp.Services
-{
-    public class LogManager
-    {
-        private readonly LogContext _context;
-        private readonly List<LogEntry> _buffer = new List<LogEntry>();
-        private readonly object _lock = new object();
-        private readonly Timer _timer;
-        private readonly int _bufferSize;
-
-        public LogManager(LogContext context, int bufferSize = 50, double flushInterval = 60000)
-        {
-            _context = context;
-            _bufferSize = bufferSize;
-            _timer = new Timer(flushInterval); // Configurar el intervalo de tiempo en milisegundos
-            _timer.Elapsed += (sender, args) => SaveLogs();
-            _timer.Start();
-
-            AppDomain.CurrentDomain.ProcessExit += (s, e) => SaveLogs();
-            AppDomain.CurrentDomain.UnhandledException += (s, e) => SaveLogs(e.ExceptionObject as Exception);
-        }
-
-        public void AddLog(string message, string level = "INFO", string source = "General", string format = "PLAIN")
+        public void AddLog(Dictionary<string, string> logData)
         {
             lock (_lock)
             {
-                _buffer.Add(new LogEntry 
-                { 
-                    Message = message, 
-                    Timestamp = DateTime.UtcNow, 
-                    Level = level, 
-                    Source = source,
-                    Format = format
-                });
+                var logEntry = new LogEntry
+                {
+                    LOG_01_DATE = logData.ContainsKey("LOG_01_DATE") ? logData["LOG_01_DATE"] : null,
+                    LOG_02_TIME = logData.ContainsKey("LOG_02_TIME") ? logData["LOG_02_TIME"] : null,
+                    LOG_03_GUID_CODE = logData.ContainsKey("LOG_03_GUID_CODE") ? logData["LOG_03_GUID_CODE"] : null,
+                    LOG_04_CODE = logData.ContainsKey("LOG_04_CODE") ? logData["LOG_04_CODE"] : null,
+                    LOG_05_ENVIRONMENT = logData.ContainsKey("LOG_05_ENVIRONMENT") ? logData["LOG_05_ENVIRONMENT"] : null,
+                    LOG_06_PROCESS = logData.ContainsKey("LOG_06_PROCESS") ? logData["LOG_06_PROCESS"] : null,
+                    LOG_07_USER_CONNECTION = logData.ContainsKey("LOG_07_USER_CONNECTION") ? logData["LOG_07_USER_CONNECTION"] : null,
+                    LOG_08_INDICATOR_CODE = logData.ContainsKey("LOG_08_INDICATOR_CODE") ? logData["LOG_08_INDICATOR_CODE"] : null,
+                    LOG_09_PROGRAM_CODE = logData.ContainsKey("LOG_09_PROGRAM_CODE") ? logData["LOG_09_PROGRAM_CODE"] : null,
+                    LOG_10_ACTION_TYPE = logData.ContainsKey("LOG_10_ACTION_TYPE") ? logData["LOG_10_ACTION_TYPE"] : null,
+                    LOG_11_ACTION_DESCRIPTION = logData.ContainsKey("LOG_11_ACTION_DESCRIPTION") ? logData["LOG_11_ACTION_DESCRIPTION"] : null,
+                    LOG_12_SERVICE_CODE = logData.ContainsKey("LOG_12_SERVICE_CODE") ? logData["LOG_12_SERVICE_CODE"] : null,
+                    LOG_13_SERVICE_DESCRIPTION = logData.ContainsKey("LOG_13_SERVICE_DESCRIPTION") ? logData["LOG_13_SERVICE_DESCRIPTION"] : null,
+                    LOG_14_PROCESS_ACTION = logData.ContainsKey("LOG_14_PROCESS_ACTION") ? logData["LOG_14_PROCESS_ACTION"] : null,
+                    LOG_15_REFERENCES = logData.ContainsKey("LOG_15_REFERENCES") ? logData["LOG_15_REFERENCES"] : null,
+                    LOG_16_ERROR_CODE = logData.ContainsKey("LOG_16_ERROR_CODE") ? logData["LOG_16_ERROR_CODE"] : null,
+                    LOG_17_ERROR_DESCRIPTION = logData.ContainsKey("LOG_17_ERROR_DESCRIPTION") ? logData["LOG_17_ERROR_DESCRIPTION"] : null,
+                    LOG_18_ERROR_TRACE = logData.ContainsKey("LOG_18_ERROR_TRACE") ? logData["LOG_18_ERROR_TRACE"] : null,
+                    LOG_19_CORE_REFERENCES = logData.ContainsKey("LOG_19_CORE_REFERENCES") ? logData["LOG_19_CORE_REFERENCES"] : null,
+                    LOG_20_CORE_ERROR_CODE = logData.ContainsKey("LOG_20_CORE_ERROR_CODE") ? logData["LOG_20_CORE_ERROR_CODE"] : null,
+                    LOG_21_CORE_ERROR_DESCRIPTION = logData.ContainsKey("LOG_21_CORE_ERROR_DESCRIPTION") ? logData["LOG_21_CORE_ERROR_DESCRIPTION"] : null,
+                };
+
+                _buffer.Add(logEntry);
                 if (_buffer.Count >= _bufferSize)
                 {
                     SaveLogs();
                 }
-            }
-        }
-
-        public void AddLog(object obj, string format = "JSON", string level = "INFO", string source = "General")
-        {
-            string serializedObject = format switch
-            {
-                "XML" => SerializeToXml(obj),
-                "Binary" => Convert.ToBase64String(SerializeToBinary(obj)),
-                _ => JsonSerializer.Serialize(obj) // Default to JSON
-            };
-
-            AddLog(serializedObject, level, source, format);
-        }
-
-        private string SerializeToXml(object obj)
-        {
-            using (var stringWriter = new StringWriter())
-            {
-                var serializer = new XmlSerializer(obj.GetType());
-                serializer.Serialize(stringWriter, obj);
-                return stringWriter.ToString();
-            }
-        }
-
-        private byte[] SerializeToBinary(object obj)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(memoryStream, obj);
-                return memoryStream.ToArray();
             }
         }
 
@@ -144,9 +95,15 @@ namespace NSunitp.Services
         {
             if (ex != null)
             {
-                AddLog($"Unhandled exception: {ex.Message}", "ERROR", "System");
+                var logData = new Dictionary<string, string>
+                {
+                    { "LOG_17_ERROR_DESCRIPTION", ex.Message },
+                    { "LOG_18_ERROR_TRACE", ex.StackTrace }
+                };
+                AddLog(logData);
             }
             SaveLogs();
         }
     }
 }
+
